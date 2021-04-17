@@ -1,10 +1,12 @@
 package com.najarang.back.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -19,22 +21,16 @@ import java.time.LocalDateTime;
  * LastModifiedDate
  * - 조회한 Entity의 값을 변경할 때 시간이 자동 저장
  */
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@Getter
 public abstract class BaseTime {
 
-    @CreatedDate
+    @Column(name = "created", updatable = false, nullable = false)
+    @CreatedDate()
     private LocalDateTime created;
 
     @LastModifiedDate
     private LocalDateTime modified;
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public LocalDateTime getModified() {
-        return modified;
-    }
 }

@@ -39,7 +39,7 @@ public class ResponseService {
         result.setList(pageObj.getContent());
         result.setTotalElements(pageObj.getTotalElements());
         result.setTotalPage(pageObj.getTotalPages());
-        result.setCurrPage(pageObj.getNumber());
+        result.setCurrPage(pageObj.getNumber() + 1);
         result.setLimit(pageObj.getSize());
         setSuccessResult(result);
         return result;
