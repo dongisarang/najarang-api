@@ -2,7 +2,6 @@ package com.najarang.back.entity;
 
 import com.najarang.back.dto.BoardDTO;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -46,7 +45,6 @@ public class Board extends BaseTime {
     }
 
     public BoardDTO toDTO(){
-        Board board = new Board(this.id, this.title, this.content, this.user, this.topic, this.likeCount, this.hitCount);
-        return new BoardDTO(board);
+        return new BoardDTO(this);
     }
 }

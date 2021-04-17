@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDTO extends BaseTime {
+public class BoardDTO extends BaseTimeDTO {
     private Long id;
     private String title;
     private String content;
@@ -31,10 +31,12 @@ public class BoardDTO extends BaseTime {
         this.topic = board.getTopic();
         this.likeCount = board.getLikeCount();
         this.hitCount = board.getHitCount();
+        setCreated(board.getCreated());
+        setModified(board.getModified());
     }
 
     public Board toEntity(){
-        return Board.builder()
+        Board board = Board.builder()
                 .id(id)
                 .title(title)
                 .content(content)
@@ -43,5 +45,8 @@ public class BoardDTO extends BaseTime {
                 .likeCount(likeCount)
                 .hitCount(hitCount)
                 .build();
+        board.setCreated(getCreated());
+        board.setModified(getModified());
+        return board;
     }
 }

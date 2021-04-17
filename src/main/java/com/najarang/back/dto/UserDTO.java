@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO extends BaseTime {
+public class UserDTO extends BaseTimeDTO {
     private Long id;
     private String interestedTopic;
     private String nickname;
@@ -25,10 +25,12 @@ public class UserDTO extends BaseTime {
         this.email = user.getEmail();
         this.provider = user.getProvider();
         this.role = user.getRole();
+        this.setCreated(user.getCreated());
+        this.setModified(user.getModified());
     }
 
     public User toEntity(){
-        return User.builder()
+        User user = User.builder()
                 .id(id)
                 .interestedTopic(interestedTopic)
                 .nickname(nickname)
@@ -37,5 +39,8 @@ public class UserDTO extends BaseTime {
                 .provider(provider)
                 .role(role)
                 .build();
+        user.setCreated(getCreated());
+        user.setModified(getModified());
+        return user;
     }
 }
