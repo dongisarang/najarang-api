@@ -2,11 +2,9 @@ package com.najarang.back.service.impl;
 
 import com.najarang.back.advice.exception.CBoardNotFoundException;
 import com.najarang.back.advice.exception.CTopicNotFoundException;
-import com.najarang.back.advice.exception.CUserNotFoundException;
 import com.najarang.back.dto.BoardDTO;
 import com.najarang.back.entity.Board;
 import com.najarang.back.entity.Topic;
-import com.najarang.back.entity.User;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.model.response.ListResult;
 import com.najarang.back.model.response.SingleResult;
@@ -32,6 +30,10 @@ public class BoardServiceImpl implements BoardService {
 
     public ListResult<Board> getBoards(Pageable pageable) {
         return responseService.getListResult(boardJpaRepo.findAll(pageable));
+    }
+
+    public ListResult<Board> getBoardsByTopicId(long topicId, Pageable pageable) {
+        return responseService.getListResult(boardJpaRepo.findByTopicId(topicId, pageable));
     }
 
     public SingleResult<Board> getBoard(long id) {
