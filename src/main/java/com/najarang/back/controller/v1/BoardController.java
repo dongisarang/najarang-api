@@ -25,8 +25,13 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping(value = "/boards")
-    public ListResult<Board> findAllBoard(final Pageable pageable) {
-        return boardService.getBoards(pageable);
+    public ListResult<Board> findAllBoard(final Pageable pageable, @RequestParam(required = false) Long topicId) {
+        ListResult<Board> result;
+        if (topicId == null)
+            result = boardService.getBoards(pageable);
+        else
+            result = boardService.getBoardsByTopicId(topicId, pageable);
+        return result;
     }
 
     @GetMapping(value = "/board/{id}")
