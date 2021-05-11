@@ -1,4 +1,4 @@
-package com.najarang.back.util;
+package com.najarang.back.auth;
 
 import io.jsonwebtoken.*;
 

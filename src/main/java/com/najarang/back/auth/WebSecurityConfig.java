@@ -1,4 +1,4 @@
-package com.najarang.back.security;
+package com.najarang.back.auth;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
