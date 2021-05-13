@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +38,9 @@ public class Board extends BaseTime {
     private Long likeCount;
     @Column(name = "HIT_COUNT")
     private Long hitCount;
+    @OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="board_id")
+    private Collection<Image> image;
 
     @PrePersist
     public void prePersist() {

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @NoArgsConstructor
@@ -48,12 +49,14 @@ public class S3Service {
 
     public String upload(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
+        String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+        String newFileName = UUID.randomUUID().toString() + extension;
 
         // 업로드를 하기위해 사용되는 함수
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
                 // 외부 공개 이미지이므로 public read 권한을 줌
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 url 반환
-        return s3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket, newFileName).toString();
     }
 }

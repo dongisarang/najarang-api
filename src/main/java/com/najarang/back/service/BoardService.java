@@ -13,7 +13,7 @@ public interface BoardService {
     SingleResult<Board> getBoard(long id);
     ListResult<Board> getBoards(Pageable pageable);
     ListResult<Board> getBoardsByTopicId(long topicId, Pageable pageable);
-    SingleResult<Board> save(BoardDTO board);
+    SingleResult<BoardDTO> save(BoardDTO board);
     SingleResult<Board> modify(BoardDTO board);
     CommonResult delete(long id);
 }
