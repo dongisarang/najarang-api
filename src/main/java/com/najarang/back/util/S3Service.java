@@ -20,6 +20,8 @@ import java.util.UUID;
 @Service
 @NoArgsConstructor
 public class S3Service {
+    private static final String CLOUD_FRONT_DOMAIN_NAME = "d9w5z7s0fwglv.cloudfront.net";
+
     private AmazonS3 s3Client;
 
     @Value("${cloud.aws.credentials.accessKey}")
@@ -57,6 +59,6 @@ public class S3Service {
                 // 외부 공개 이미지이므로 public read 권한을 줌
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 url 반환
-        return s3Client.getUrl(bucket, newFileName).toString();
+        return "https://" + CLOUD_FRONT_DOMAIN_NAME + "/" + newFileName;
     }
 }
