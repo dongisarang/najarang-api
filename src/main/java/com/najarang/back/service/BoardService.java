@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface BoardService {
 
-    SingleResult<Board> getBoard(long id);
-    ListResult<Board> getBoards(Pageable pageable);
-    ListResult<Board> getBoardsByTopicId(long topicId, Pageable pageable);
+    SingleResult<BoardDTO> getBoard(long id);
+    ListResult<BoardDTO> getBoards(Pageable pageable);
+    ListResult<BoardDTO> getBoardsByTopicId(long topicId, Pageable pageable);
     SingleResult<BoardDTO> save(BoardDTO board);
-    SingleResult<Board> modify(BoardDTO board);
+    SingleResult<BoardDTO> modify(BoardDTO board);
     CommonResult delete(long id);
 }
