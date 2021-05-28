@@ -70,12 +70,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     antMatchers(PERMIT_ALL_PATHS).permitAll().
                 // all other requests need to be authenticated
                     anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
                         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                // JWT 인증에는 기본으로 세션을 사용하지 않기 때문에 stateless를 사용
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request
+        // JWT 인증을 처리할 Filter를 security의 기본적인 필터인 UsernamePasswordAuthenticationFilter 앞에 넣기
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -42,6 +42,8 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' // MariaDB
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'com.querydsl:querydsl-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
+    compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
