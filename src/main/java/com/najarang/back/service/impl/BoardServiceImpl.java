@@ -5,6 +5,7 @@ import com.najarang.back.advice.exception.CTopicNotFoundException;
 import com.najarang.back.dto.BoardDTO;
 import com.najarang.back.dto.ImageDTO;
 import com.najarang.back.entity.Board;
+import com.najarang.back.entity.Image;
 import com.najarang.back.entity.Topic;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.model.response.ListResult;
@@ -116,13 +117,22 @@ public class BoardServiceImpl implements BoardService {
             boardDto.setTopic(topic);
         }
         BoardDTO insertedBoard = boardJpaRepo.save(boardDto.toEntity()).toDTO();
-        insertedBoard.setImageUrls(insertedBoard.getImages().stream().map(image -> image.getFileName()).collect(Collectors.toList()));
+        if(insertedBoard.getImages().size() > 0) {
+            insertedBoard.setImageUrls(insertedBoard.getImages().stream().map(image -> image.getFileName()).collect(Collectors.toList()));
+        }
         insertedBoard.setImages(null);
         return responseService.getSingleResult(insertedBoard);
     }
 
+    @Transactional
     public CommonResult delete(long id) {
-        boardJpaRepo.deleteById(id);
-        return responseService.getSuccessResult();
+        try {
+            Collection<Image> images = imageJpaRepo.findByBoardId(id);
+            s3Service.deleteFile(images);
+            boardJpaRepo.deleteById(id);
+            return responseService.getSuccessResult();
+        } catch (Exception e) {
+            return responseService.getFailResult(500, e.toString());
+        }
     }
 }

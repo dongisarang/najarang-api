@@ -50,13 +50,17 @@ public class BoardController {
         }
     }
 
-    @PutMapping(value = "/board/{id}")
-    public SingleResult<BoardDTO> modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody BoardDTO board, @PathVariable long id) {
+    @PutMapping(value = "/board/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @ModelAttribute BoardDTO board, @PathVariable long id) {
 
-        board.setId(id);
-        board.setUser(customUserDetail.getUser());
+        try {
+            board.setId(id);
+            board.setUser(customUserDetail.getUser());
 
-        return boardService.modify(board);
+            return boardService.modify(board);
+        } catch (Exception e) {
+            return responseService.getFailResult(500, e.toString());
+        }
     }
 
     @DeleteMapping(value = "/board/{id}")

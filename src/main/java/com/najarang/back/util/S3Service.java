@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+import com.najarang.back.entity.Image;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -60,5 +62,20 @@ public class S3Service {
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 url 반환
         return "https://" + CLOUD_FRONT_DOMAIN_NAME + "/" + newFileName;
+    }
+
+    public void deleteFile(Collection<Image> images) throws IOException {
+        images.stream().forEach(image -> {
+            String currentFilePath = image.getFileName();
+            String s3FilePath = currentFilePath.substring(currentFilePath.lastIndexOf("/") + 1, currentFilePath.length());
+            // key가 존재하면 기존 파일은 삭제
+            if ("".equals(s3FilePath) == false && s3FilePath != null) {
+                boolean isExistObject = s3Client.doesObjectExist(bucket, s3FilePath);
+
+                if (isExistObject == true) {
+                    s3Client.deleteObject(bucket, s3FilePath);
+                }
+            }
+        });
     }
 }
