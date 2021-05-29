@@ -57,6 +57,7 @@ public class BoardController {
 
             return boardService.modify(board);
         } catch (Exception e) {
+            e.printStackTrace();
             return responseService.getFailResult(500, e.toString());
         }
     }
