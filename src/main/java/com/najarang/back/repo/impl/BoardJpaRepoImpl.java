@@ -1,5 +1,6 @@
 package com.najarang.back.repo.impl;
 
+import com.najarang.back.dto.BoardDTO;
 import com.najarang.back.entity.Board;
 import com.najarang.back.repo.BoardJpaRepoCustom;
 import com.querydsl.core.QueryResults;
