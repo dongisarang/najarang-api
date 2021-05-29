@@ -1,4 +1,4 @@
-package com.najarang.back.auth;
+package com.najarang.back.security;
 
 import com.najarang.back.advice.exception.CUserNotFoundException;
 import com.najarang.back.entity.User;

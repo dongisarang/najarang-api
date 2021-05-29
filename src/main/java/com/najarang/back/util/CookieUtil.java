@@ -1,6 +1,6 @@
-package com.najarang.back.auth;
+package com.najarang.back.util;
 
-import com.najarang.back.auth.JwtTokenUtil;
+import com.najarang.back.security.JwtTokenUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
