@@ -60,20 +60,19 @@ public class S3Service {
         s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
                 // 외부 공개 이미지이므로 public read 권한을 줌
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 url 반환
-        return "https://" + CLOUD_FRONT_DOMAIN_NAME + "/" + newFileName;
+        // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 fileName 반환
+        return newFileName;
     }
 
     public void deleteFile(Collection<Image> images) throws IOException {
         images.stream().forEach(image -> {
             String currentFilePath = image.getFileName();
-            String s3FilePath = currentFilePath.substring(currentFilePath.lastIndexOf("/") + 1, currentFilePath.length());
             // key가 존재하면 기존 파일은 삭제
-            if ("".equals(s3FilePath) == false && s3FilePath != null) {
-                boolean isExistObject = s3Client.doesObjectExist(bucket, s3FilePath);
+            if ("".equals(currentFilePath) == false && currentFilePath != null) {
+                boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
 
                 if (isExistObject == true) {
-                    s3Client.deleteObject(bucket, s3FilePath);
+                    s3Client.deleteObject(bucket, currentFilePath);
                 }
             }
         });
