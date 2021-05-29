@@ -1,4 +1,4 @@
-package com.najarang.back.auth;
+package com.najarang.back.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -1,4 +1,4 @@
-package com.najarang.back.auth;
+package com.najarang.back.security;
 import java.util.Collection;
 import java.util.Collections;
 
