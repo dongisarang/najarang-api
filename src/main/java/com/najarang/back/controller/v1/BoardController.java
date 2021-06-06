@@ -32,12 +32,12 @@ public class BoardController {
         return result;
     }
 
-    @GetMapping(value = "/board/{id}")
+    @GetMapping(value = "/boards/{id}")
     public SingleResult<BoardDTO> findBoardById(@PathVariable long id) {
         return boardService.getBoard(id);
     }
 
-    @PostMapping(value = "/board", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/boards", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public CommonResult save(@AuthenticationPrincipal CustomUserDetails customUserDetail,
                                     @ModelAttribute BoardDTO board) {
         try {
@@ -48,7 +48,7 @@ public class BoardController {
         }
     }
 
-    @PutMapping(value = "/board/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PutMapping(value = "/boards/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @ModelAttribute BoardDTO board, @PathVariable long id) {
 
         try {
@@ -62,7 +62,7 @@ public class BoardController {
         }
     }
 
-    @DeleteMapping(value = "/board/{id}")
+    @DeleteMapping(value = "/boards/{id}")
     public CommonResult delete(@PathVariable long id) {
         return boardService.delete(id);
     }

@@ -23,18 +23,18 @@ public class TopicController {
         return topicService.list(pageable);
     }
 
-    @PostMapping(value = "/topic")
+    @PostMapping(value = "/topics")
     public SingleResult<Topic> save(@RequestBody TopicDTO topic) {
         return topicService.save(topic);
     }
 
-    @PutMapping(value = "/topic/{id}")
+    @PutMapping(value = "/topics/{id}")
     public SingleResult<Topic> modify(@RequestBody TopicDTO topic, @PathVariable long id) {
         topic.setId(id);
         return topicService.modify(topic);
     }
 
-    @DeleteMapping(value = "/topic/{id}")
+    @DeleteMapping(value = "/topics/{id}")
     public CommonResult delete(@PathVariable long id) {
         return topicService.delete(id);
     }
