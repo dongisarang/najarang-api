@@ -29,26 +29,26 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 단건 조회", notes = "회원번호로 회원을 조회한다")
-    @GetMapping(value = "/user/{id}")
+    @GetMapping(value = "/users/{id}")
     public SingleResult<User> findUserById(@ApiParam(value = "회원번호", required = true) @PathVariable long id) {
         return userService.getUser(id);
     }
 
     @ApiOperation(value = "회원 등록", notes = "회원을 등록한다")
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/users")
     public SingleResult<User> save(@ApiParam(name = "user", value = "회원정보", required = true) @RequestBody UserDTO user) {
         return userService.save(user);
     }
 
     @ApiOperation(value = "회원 수정", notes = "회원정보를 수정한다")
-    @PutMapping(value = "/user/{id}")
+    @PutMapping(value = "/users/{id}")
     public SingleResult<User> modify(@ApiParam(name = "user", value = "회원정보", required = true) @RequestBody UserDTO user, @PathVariable long id) {
         user.setId(id);
         return userService.modify(user);
     }
 
     @ApiOperation(value = "회원 삭제", notes = "회원번호로 회원정보를 삭제한다")
-    @DeleteMapping(value = "/user/{id}")
+    @DeleteMapping(value = "/users/{id}")
     public CommonResult delete(
             @ApiParam(value = "회원번호", required = true) @PathVariable long id) {
         return userService.delete(id);
