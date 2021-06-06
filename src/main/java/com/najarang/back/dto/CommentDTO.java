@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDTO {
+public class CommentDTO extends BaseTimeDTO{
     private Long id;
     private String content;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,8 +26,8 @@ public class CommentDTO {
         this.content = comment.getContent();
         this.user = comment.getUser();
         this.boardId = comment.getBoardId();
-        comment.setCreated(comment.getCreated());
-        comment.setModified(comment.getModified());
+        setCreated(comment.getCreated());
+        setModified(comment.getModified());
     }
 
     public Comment toEntity(){
