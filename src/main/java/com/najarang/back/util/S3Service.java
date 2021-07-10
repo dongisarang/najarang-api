@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import com.najarang.back.entity.Image;
@@ -55,9 +56,10 @@ public class S3Service {
         String fileName = file.getOriginalFilename();
         String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
         String newFileName = UUID.randomUUID().toString() + extension;
-
+        ObjectMetadata md = new ObjectMetadata();
+        md.setContentType("image/jpeg");
         // 업로드를 하기위해 사용되는 함수
-        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), md)
                 // 외부 공개 이미지이므로 public read 권한을 줌
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         // 업로드를 한 후, 해당 url을 db에 저장할 수 있도록 fileName 반환

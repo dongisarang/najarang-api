@@ -39,7 +39,7 @@ dependencies {
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' // MariaDB
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.3' // MariaDB
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'com.querydsl:querydsl-jpa'
 
