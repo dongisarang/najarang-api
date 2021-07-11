@@ -14,6 +14,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+// 개발자가 직접 작성한 클래스를 bean 등록하고자 할 경우 사용
 @Component
 public class JwtTokenUtil implements Serializable {
 

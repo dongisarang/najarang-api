@@ -16,11 +16,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
+/*
+* EnableWebSecurity :
+*   스프링시큐리티 활성화
+*   내부에 @Configuration 있기 때문에 생략 가능
+* EnableGlobalMethodSecurity(prePostEnabled = true) :
+*   Controller에서 특정 페이지에 특정 권한이 있는 유저만 접근을 허용할 경우
+*   @PreAuthorize 어노테이션을 사용하는데,
+*   해당 어노테이션에 대한 설정을 활성화 (필수x)
+* */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // 주입 대상이 되는 bean을 컨테이너에 찾아 주입
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 

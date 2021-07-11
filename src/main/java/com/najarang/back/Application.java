@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 * => SpringBootConfiguration :
 *   스프링의 @Configuration을 대체하며 스프링 부트 전용 어노테이션
 * => ComponentScan :
-*   @component 어노테이션 및 @Service, @Repository, @Controller 등의 어노테이션을 스캔하여 Bean으로 등록
+*   @component 어노테이션 및 @Service, @Repository, @Controller 등의 어노테이션을 스캔하여 Bean으로 컨테이너에 등록
 * => EnableAutoConfiguration :
 *   사전에 정의한 라이브러리들을  Bean으로 등록
 *   @ConditionalOnXxx… 와 같은 형태로 Condition에 적합한 경우 생성하고 생성하지 않게 설정
