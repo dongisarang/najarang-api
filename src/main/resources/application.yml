@@ -3,3 +3,5 @@ management:
     web:
       exposure:
         include: refresh
+
+# /actuator/refresh를 통해 업데이트된 config정보를 갱신하기 위함

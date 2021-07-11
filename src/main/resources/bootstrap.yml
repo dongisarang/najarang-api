@@ -15,4 +15,5 @@ spring:
         default-page-size: 10
         one-indexed-parameters: true
 
+# bootstrap.yml이 application.yml보다 먼저 로드
 
