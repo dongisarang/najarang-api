@@ -16,11 +16,31 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
+/*
+* EnableWebSecurity :
+*   스프링시큐리티 활성화
+*   내부에 @Configuration 있기 때문에 생략 가능
+* EnableGlobalMethodSecurity(prePostEnabled = true) :
+*   Controller에서 특정 페이지에 특정 권한이 있는 유저만 접근을 허용할 경우
+*   @PreAuthorize 어노테이션을 사용하는데,
+*   해당 어노테이션에 대한 설정을 활성화 (필수x)
+* */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+/*
+* CustomAuthenticationProvider를 등록
+* => WebSecurityConfigurerAdapter를 상속해 만든 SecurityConfig에서 할 수 있음
+* => WebSecurityConfigurerAdapter의 상위 클래스에서는 AuthenticationManager를 가지고 있기 때문에
+* 우리가 직접 만든 CustomAuthenticationProvider를 등록할 수 있음
+*
+* AuthenticationManager : 인증에 대한 부분 처리
+* => 인증 성공 : 2번째 생성자를 이용해 인증이 성공한(isAuthenticated=true) 객체를 생성하여 Security Context에 저장
+* 그리고 인증 상태를 유지하기 위해 세션에 보관
+* => 인증 실패 : AuthenticationException 발생
+* */
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    // 주입 대상이 되는 bean을 컨테이너에 찾아 주입
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
