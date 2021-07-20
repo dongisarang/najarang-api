@@ -3,11 +3,11 @@ package com.najarang.back.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,7 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 * CustomAuthenticationProvider를 등록
 * => WebSecurityConfigurerAdapter를 상속해 만든 SecurityConfig에서 할 수 있음
 * => WebSecurityConfigurerAdapter의 상위 클래스에서는 AuthenticationManager를 가지고 있기 때문에
-* 우리가 직접 만든 CustomAuthenticationProvider를 등록할 수 있음
+* 직접 만든 CustomAuthenticationProvider를 등록할 수 있음
 *
 * AuthenticationManager : 인증에 대한 부분 처리
 * => 인증 성공 : 2번째 생성자를 이용해 인증이 성공한(isAuthenticated=true) 객체를 생성하여 Security Context에 저장
@@ -57,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/boards",
             "/board/**",
             "/helloworld/**",
-            "/error/**"
+            "/error/**",
+
     };
 
     @Autowired
@@ -79,9 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    // HttpSecurity : 보안 처리
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
 
         // We don't need CSRF for this example
         httpSecurity.csrf().disable()
@@ -97,5 +98,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Add a filter to validate the tokens with every request
         // JWT 인증을 처리할 Filter를 security의 기본적인 필터인 UsernamePasswordAuthenticationFilter 앞에 넣기
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    // WebSecurity : 보안 예외 처리
+    // Security filter chain 적용할 필요가 전혀 없는 요청을 ignore하고 싶을 때 사용
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // security에 막혀 호출되지 않는 swagger를 위해 uri를 ignoring할 수 있도록 함
+        // /v2/api-docs : Spring Fox가 문서를 위해 사용하는 default URL
+        web.ignoring().antMatchers(
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/swagger/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
     }
 }
