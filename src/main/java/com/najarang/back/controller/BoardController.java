@@ -1,4 +1,4 @@
-package com.najarang.back.controller.v1;
+package com.najarang.back.controller;
 
 import com.najarang.back.dto.BoardDTO;
 import com.najarang.back.model.response.CommonResult;

@@ -1,4 +1,4 @@
-package com.najarang.back.controller.v1;
+package com.najarang.back.controller;
 
 import com.najarang.back.dto.TopicDTO;
 import com.najarang.back.entity.Topic;

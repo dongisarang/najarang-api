@@ -1,4 +1,4 @@
-package com.najarang.back.controller.v1;
+package com.najarang.back.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
