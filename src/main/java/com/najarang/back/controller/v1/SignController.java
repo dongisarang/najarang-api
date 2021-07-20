@@ -3,7 +3,7 @@ package com.najarang.back.controller.v1;
 import com.najarang.back.dto.UserDTO;
 import com.najarang.back.entity.User;
 import com.najarang.back.model.response.CommonResult;
-import com.najarang.back.security.JwtTokenUtil;
+import com.najarang.back.security.JwtTokenProvider;
 import com.najarang.back.security.JwtUserDetailsService;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.UserService;
@@ -25,7 +25,7 @@ public class SignController {
     private final UserService userService;
     private final ResponseService responseService; // 결과를 처리할 Service
     private final JwtUserDetailsService userDetailsService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
     private final RedisUtil redisUtil;
 
@@ -36,12 +36,12 @@ public class SignController {
             String subject = user.getEmail() + "provider:" + user.getProvider();
             // 올바른 email,provider인지 확인
             userDetailsService.loadUserByUsername(subject);
-            final String accessJwt = jwtTokenUtil.generateToken(subject);
-            final String refreshJwt = jwtTokenUtil.generateRefreshToken(subject);
+            final String accessJwt = jwtTokenProvider.generateToken(subject);
+            final String refreshJwt = jwtTokenProvider.generateRefreshToken(subject);
 
-            Cookie accessToken = cookieUtil.createCookie(jwtTokenUtil.ACCESS_TOKEN_NAME, accessJwt);
-            Cookie refreshToken = cookieUtil.createCookie(jwtTokenUtil.REFRESH_TOKEN_NAME, refreshJwt);
-            redisUtil.setDataExpire(refreshJwt, subject, jwtTokenUtil.REFRESH_TOKEN_EXPIRE_TIME);
+            Cookie accessToken = cookieUtil.createCookie(jwtTokenProvider.ACCESS_TOKEN_NAME, accessJwt);
+            Cookie refreshToken = cookieUtil.createCookie(jwtTokenProvider.REFRESH_TOKEN_NAME, refreshJwt);
+            redisUtil.setDataExpire(refreshJwt, subject, jwtTokenProvider.REFRESH_TOKEN_EXPIRE_TIME);
 
             res.addCookie(accessToken);
             res.addCookie(refreshToken);

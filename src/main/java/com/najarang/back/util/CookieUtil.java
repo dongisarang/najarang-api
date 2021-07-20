@@ -1,6 +1,6 @@
 package com.najarang.back.util;
 
-import com.najarang.back.security.JwtTokenUtil;
+import com.najarang.back.security.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -15,7 +15,7 @@ public class CookieUtil {
     public Cookie createCookie(String cookieName, String value){
         Cookie token = new Cookie(cookieName,value);
         token.setHttpOnly(true);
-        token.setMaxAge((int) JwtTokenUtil.ACCESS_TOKEN_EXPIRE_TIME);
+        token.setMaxAge((int) JwtTokenProvider.ACCESS_TOKEN_EXPIRE_TIME);
         token.setPath("/");
         return token;
     }
