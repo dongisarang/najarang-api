@@ -4,7 +4,7 @@ import com.najarang.back.dto.UserDTO;
 import com.najarang.back.entity.User;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.security.JwtTokenProvider;
-import com.najarang.back.security.JwtUserDetailsService;
+import com.najarang.back.security.UserDetailsServiceImpl;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.UserService;
 import com.najarang.back.util.CookieUtil;
@@ -24,7 +24,7 @@ public class SignController {
 
     private final UserService userService;
     private final ResponseService responseService; // 결과를 처리할 Service
-    private final JwtUserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
     private final RedisUtil redisUtil;
