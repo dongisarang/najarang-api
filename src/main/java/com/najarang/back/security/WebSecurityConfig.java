@@ -1,6 +1,7 @@
 package com.najarang.back.security;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 * */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 /*
 * CustomAuthenticationProvider를 등록
 * => WebSecurityConfigurerAdapter를 상속해 만든 SecurityConfig에서 할 수 있음
@@ -40,15 +42,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 * */
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // 주입 대상이 되는 bean을 컨테이너에 찾아 주입
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    @Autowired
-    private UserDetailsService jwtUserDetailsService;
-
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    // private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UserDetailsService jwtUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
 
     private static final String[] PERMIT_ALL_PATHS = {
             "/signin",
@@ -58,22 +55,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/board/**",
             "/helloworld/**",
             "/error/**",
-
     };
 
+    // @Autowired: 주입 대상이 되는 bean을 컨테이너에 찾아 주입
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
+        // AuthenticationManagerBuilder 를 통해 customSecurityUsersService 에 PasswordEncoder 를 등록
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    //PasswordEncoder는 다른 서비스에서도 쓰일 수 있음으로 빈객체로 등록
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /*
+    * WebSecurityConfig 내에서 설정하는 경우는 필요가 없지만 외부에서 인증관리자를 사용하기 위한 설정
+    * - 외부로 표출해 주는 메소드를 강제로 호출하여 @Bean으로 등록 ex) 로그인 컨트롤러에서 사용
+    * */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -84,18 +84,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
-        // We don't need CSRF for this example
-        httpSecurity.csrf().disable()
-                // dont authenticate this particular request
+        httpSecurity
+                // basic auth를 사용하기 위해 csrf 보호 기능 disable
+                .csrf().disable()
+                // PERMIT_ALL_PATHS에 해당하는 모든 request를 인증
                 .authorizeRequests().
                     antMatchers(PERMIT_ALL_PATHS).permitAll().
-                // all other requests need to be authenticated
+                // 그외 다른요청은 인증 필요
                     anyRequest().authenticated().and().
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                        exceptionHandling()
+                        // 인증과정에서 실패 401
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        // 필요한 권한이 없이 접근하려 할때 403 에러
+                        //.accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
                 // JWT 인증에는 기본으로 세션을 사용하지 않기 때문에 stateless를 사용
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // Add a filter to validate the tokens with every request
         // JWT 인증을 처리할 Filter를 security의 기본적인 필터인 UsernamePasswordAuthenticationFilter 앞에 넣기
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

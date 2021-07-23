@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserJpaRepo userJpaRepo;
+    // NOTE 비밀번호 암호화를 위한 주입. 비밀번호를 적용할 때 사용할 예정
+    // private final PasswordEncoder passwordEncoder;
 
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,6 +39,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private CustomUserDetails getUserDetails(User user) {
         CustomUserDetails userDetail = new CustomUserDetails();
+        // String encodedPassword = passwordEncoder.encode(user.getPassword());
+        // userDetail.setPassword(encodedPassword);
         userDetail.setID(user.getId().toString());
         userDetail.setEMAIL(user.getEmail());
         userDetail.setPROVIDER(user.getProvider());
