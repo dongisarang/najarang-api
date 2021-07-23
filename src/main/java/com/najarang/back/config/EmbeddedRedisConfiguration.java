@@ -24,6 +24,9 @@ public class EmbeddedRedisConfiguration {
     private RedisServer redisServer;
 
     // @PostConstruct : 초기화 작업을 할 메소드에 적용. was가 띄워질 때 실행
+    // 생성자(일반)가 호출 되었을 때, 빈(bean)은 아직 초기화 되지 않았다. (예를 들어, 주입된 의존성이 없음)
+    // 의존성 주입이 이루어진 후 초기화를 수행.
+    // 한번만 수행되는 것을 보장
     @PostConstruct
     public void redisServer() throws IOException {
         redisServer = new RedisServer(redisPort);

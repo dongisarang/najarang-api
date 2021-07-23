@@ -23,6 +23,7 @@ import java.util.UUID;
 @Service
 @NoArgsConstructor
 public class S3Service {
+
     private static final String CLOUD_FRONT_DOMAIN_NAME = "d9w5z7s0fwglv.cloudfront.net";
 
     private AmazonS3 s3Client;
@@ -39,7 +40,6 @@ public class S3Service {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    // 의존성 주입이 이루어진 후 초기화를 수행하는 메서드, bean이 한 번만 초기화 될수 있도록 함
     @PostConstruct
     public void setS3Client() {
         // 자격 증명 객체를 얻기
