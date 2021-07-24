@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/topics",
             "/boards",
             "/board/**",
-            "/error/**",
+            "/exception/**",
     };
 
     // @Autowired: 주입 대상이 되는 bean을 컨테이너에 찾아 주입

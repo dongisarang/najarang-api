@@ -38,6 +38,7 @@ public class CustomUserDetails implements UserDetails {
         return PASSWORD;
     }
 
+    // security에서 사용하는 회원 구분 id
     // 계정의 고유한 값을 리턴
     @Override
     public String getUsername() {

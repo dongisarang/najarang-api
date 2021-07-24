@@ -25,25 +25,16 @@ public class SignController {
 
     @PostMapping(path = "/sign-in")
     public CommonResult signIn(@RequestBody UserDTO user, HttpServletRequest req, HttpServletResponse res) {
-
-        try {
-            Cookie accessToken = userService.signIn(user);
-            res.addCookie(accessToken);
-            return responseService.getSuccessResult();
-        } catch (Exception e) {
-            return responseService.getFailResult(403, "로그인에 실패했습니다.");
-        }
+        Cookie accessToken = userService.signIn(user);
+        res.addCookie(accessToken);
+        return responseService.getSuccessResult();
     }
 
     @PostMapping(path = "/sign-up")
     public CommonResult signUp(@RequestBody UserDTO user, HttpServletRequest req, HttpServletResponse res) {
-        try {
-            Cookie accessToken = userService.signUp(user);
-            res.addCookie(accessToken);
-            return responseService.getSuccessResult();
-        } catch (Exception e) {
-            return responseService.getFailResult(403, "회원가입에 실패했습니다.");
-        }
+        Cookie accessToken = userService.signUp(user);
+        res.addCookie(accessToken);
+        return responseService.getSuccessResult();
     }
 
     @PostMapping(path = "/sign-out")
