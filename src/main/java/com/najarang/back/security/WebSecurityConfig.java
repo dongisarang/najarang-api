@@ -48,12 +48,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
 
     private static final String[] PERMIT_ALL_PATHS = {
-            "/signin",
-            "/signup",
+            "/sign-in",
+            "/sign-up",
             "/topics",
             "/boards",
             "/board/**",
-            "/helloworld/**",
             "/error/**",
     };
 

@@ -7,6 +7,8 @@ import com.najarang.back.model.response.ListResult;
 import com.najarang.back.model.response.SingleResult;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.Cookie;
+
 public interface UserService {
 
     ListResult<User> getUsers(Pageable pageable);
@@ -14,6 +16,7 @@ public interface UserService {
     SingleResult<User> save(UserDTO user);
     SingleResult<User> modify(UserDTO user);
     CommonResult delete(long id);
-    User signin(UserDTO user);
-    User signup(UserDTO user);
+    Cookie signIn(UserDTO user);
+    Cookie signUp(UserDTO user);
+    void signOut(UserDTO user);
 }

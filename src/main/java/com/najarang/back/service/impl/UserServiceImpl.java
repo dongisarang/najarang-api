@@ -8,13 +8,18 @@ import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.model.response.ListResult;
 import com.najarang.back.model.response.SingleResult;
 import com.najarang.back.repo.UserJpaRepo;
+import com.najarang.back.security.JwtTokenProvider;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.UserService;
+import com.najarang.back.util.CookieUtil;
+import com.najarang.back.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,7 +28,10 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
 
     private final UserJpaRepo userJpaRepo;
-    private final ResponseService responseService; // 결과를 처리할 Service
+    private final ResponseService responseService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CookieUtil cookieUtil;
+    private final RedisUtil redisUtil;
 
     public ListResult<User> getUsers(Pageable pageable) {
         Page<User> users = userJpaRepo.findAll(pageable);
@@ -54,18 +62,31 @@ public class UserServiceImpl implements UserService{
         return responseService.getSuccessResult();
     }
 
-    public User signin(UserDTO user) {
+    public Cookie signIn(UserDTO user) {
         Optional<User> loginUser = userJpaRepo.findByEmailAndProvider(user.getEmail(), user.getProvider());
-        loginUser.orElseThrow(() -> new CUserNotFoundException());
-        return loginUser.get();
+        loginUser.orElseThrow(CUserNotFoundException::new);
+        Cookie accessToken = this.loginSuccess(loginUser.get());
+        return accessToken;
     }
 
-    public User signup(UserDTO user) {
+    public Cookie signUp(UserDTO user) {
         Optional<User> loginUser = userJpaRepo.findByEmailAndProvider(user.getEmail(), user.getProvider());
-        if (!loginUser.isPresent()) {
-            return userJpaRepo.save(user.toEntity());
-        } else {
-            throw new CUserAlreadyExistException();
-        }
+        loginUser.ifPresent(s -> { throw new CUserAlreadyExistException(); });
+        User insertedUser = userJpaRepo.save(user.toEntity());
+        Cookie accessToken = this.loginSuccess(insertedUser);
+        return accessToken;
+    }
+
+    public void signOut(UserDTO user) {
+        String subject = jwtTokenProvider.makeStringUserDetails(user.toEntity());
+        redisUtil.deleteData(subject);
+    }
+
+    private Cookie loginSuccess(User user) {
+        String subject = jwtTokenProvider.makeStringUserDetails(user);
+        Cookie accessToken = cookieUtil.createAccessToken(subject);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(subject);
+        redisUtil.setDataExpire(subject, refreshToken, JwtTokenProvider.REFRESH_TOKEN_EXPIRE_TIME);
+        return accessToken;
     }
 }

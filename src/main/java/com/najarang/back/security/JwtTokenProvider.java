@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.najarang.back.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -104,5 +104,9 @@ public class JwtTokenProvider implements Serializable {
     public UsernamePasswordAuthenticationToken getAuthentication(String username) {
         CustomUserDetails userDetails = this.userDetailsServiceImpl.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
+    }
+
+    public String makeStringUserDetails(User user) {
+        return user.getEmail() + "provider:" + user.getProvider();
     }
 }

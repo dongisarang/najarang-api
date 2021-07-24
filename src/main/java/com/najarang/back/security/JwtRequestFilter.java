@@ -47,13 +47,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // TODO 리팩토링 filter
         final Cookie jwtToken = cookieUtil.getCookie(request, jwtTokenProvider.ACCESS_TOKEN_NAME);
 
         String username = null;
         String jwt = null;
         String refreshJwt = null;
-        String refreshUname = null;
 
         try{
             if(jwtToken != null){
@@ -65,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             // username과 인증정보에 대한 null 확인
             if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = this.jwtTokenProvider.getAuthentication(username);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtTokenProvider.getAuthentication(username);
 
                 if(jwtTokenProvider.validateToken(jwt, username)){
                     usernamePasswordAuthenticationToken
@@ -75,29 +73,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }catch (ExpiredJwtException e){
             // access token이 유효하지 않으면 refresh token 값을 읽음
-            Cookie refreshToken = cookieUtil.getCookie(request, jwtTokenProvider.REFRESH_TOKEN_NAME);
-            if(refreshToken != null){
-                refreshJwt = refreshToken.getValue();
-            }
+            refreshJwt = redisUtil.getData(username);
         }catch(Exception e){
 
         }
 
         try{
             if(refreshJwt != null){
-                refreshUname = redisUtil.getData(refreshJwt);
+                username = redisUtil.getData(refreshJwt);
 
-                if(refreshUname.equals(jwtTokenProvider.getUsernameFromToken(refreshJwt))){
+                if(username.equals(jwtTokenProvider.getUsernameFromToken(refreshJwt))){
 
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = this.jwtTokenProvider.getAuthentication(refreshUname);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtTokenProvider.getAuthentication(username);
 
                     usernamePasswordAuthenticationToken
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-                    final String newAccessJwt = jwtTokenProvider.generateToken(refreshUname);
-
-                    Cookie newAccessToken = cookieUtil.createCookie(jwtTokenProvider.ACCESS_TOKEN_NAME, newAccessJwt);
+                    Cookie newAccessToken = cookieUtil.createAccessToken(username);
 
                     response.addCookie(newAccessToken);
                 }
