@@ -2,7 +2,7 @@ package com.najarang.back.security;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.najarang.back.entity.User;
+import com.najarang.back.dto.UserDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
     private String EMAIL;
     private String PROVIDER;
     private String AUTHORITY;
-    private User user;
+    private UserDTO user;
     private boolean ENABLED;
 
     // 계정의 권한 목록을 리턴

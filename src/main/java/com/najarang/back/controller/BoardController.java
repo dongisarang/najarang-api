@@ -58,14 +58,14 @@ public class BoardController {
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public CommonResult save(@AuthenticationPrincipal CustomUserDetails customUserDetail,
                                     @ModelAttribute BoardDTO board) {
-        board.setUser(customUserDetail.getUser().toDTO());
+        board.setUser(customUserDetail.getUser());
         return boardService.save(board);
     }
 
     @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @ModelAttribute BoardDTO board, @PathVariable long id) {
         board.setId(id);
-        board.setUser(customUserDetail.getUser().toDTO());
+        board.setUser(customUserDetail.getUser());
         return boardService.modify(board);
     }
 

@@ -35,14 +35,14 @@ public class CommentController {
     // - 요청받은 데이터를 변환시키는 것이기 때문에, Setter함수가 없어도 값이 매핑
     @PostMapping()
     public CommonResult save(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment) {
-        comment.setUser(customUserDetail.getUser().toDTO());
+        comment.setUser(customUserDetail.getUser());
         return commentService.save(comment);
     }
 
     @PutMapping()
     public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment, @PathVariable long id) {
         comment.setId(id);
-        comment.setUser(customUserDetail.getUser().toDTO());
+        comment.setUser(customUserDetail.getUser());
         return commentService.modify(comment);
     }
 

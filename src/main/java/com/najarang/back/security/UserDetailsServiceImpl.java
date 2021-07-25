@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userDetail.setID(user.getId().toString());
         userDetail.setEMAIL(user.getEmail());
         userDetail.setPROVIDER(user.getProvider());
-        userDetail.setUser(user);
+        userDetail.setUser(user.toDTO());
         return userDetail;
     }
 }

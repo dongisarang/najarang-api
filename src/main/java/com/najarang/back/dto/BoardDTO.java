@@ -2,15 +2,12 @@ package com.najarang.back.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.najarang.back.entity.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /*
 * @NoArgsConstructor : 파라미터가 없는 기본 생성자를 생성

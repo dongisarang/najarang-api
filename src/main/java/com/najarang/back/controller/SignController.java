@@ -12,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ public class SignController {
 
     @PostMapping(path = "/sign-out")
     public CommonResult signOut(@AuthenticationPrincipal CustomUserDetails customUserDetail, HttpServletResponse res) {
-        userService.signOut(customUserDetail.getUser().toDTO());
+        userService.signOut(customUserDetail.getUser());
         Cookie resetCookie = new Cookie(JwtTokenProvider.ACCESS_TOKEN_NAME, "");
         resetCookie.setMaxAge(0);
         res.addCookie(resetCookie);
