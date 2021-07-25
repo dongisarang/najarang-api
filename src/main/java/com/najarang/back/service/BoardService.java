@@ -15,5 +15,5 @@ public interface BoardService {
     ListResult<BoardDTO> getBoardsByTopicId(long topicId, Pageable pageable);
     SingleResult<BoardDTO> save(BoardDTO board);
     SingleResult<BoardDTO> modify(BoardDTO board);
-    CommonResult delete(long id);
+    CommonResult delete(long id) throws Exception;
 }

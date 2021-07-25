@@ -22,9 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -69,7 +69,12 @@ public class BoardServiceImpl implements BoardService {
         return responseService.getSingleResult(boardDTO);
     }
 
-    @Transactional
+    // @Transactional : 트랜잭션이 적용된 범위에서는 트랜잭션 기능이 포함된 프록시 객체가 생성되어 자동으로 commit 혹은 rollback을 진행
+    // - JPA의 구현체를 살펴보면 모든 메서드에 이미 @Transactional이 선언되어 있기 때문에 
+    //   문제가 발생하면 Rollback 처리. 따라서 save()등 기본에는 따로 추가하지않음
+    // - 기본적으로 Unchecked Exception, Error 만 rollback
+    // - rollbackFor : 모든 예외에 대해서 rollback을 진행하기 위해 추가함 for Checked Exception. 특정 예외 발생 시 rollback을 시켜주는 기능이 있음
+    @Transactional(rollbackFor = Exception.class)
     public SingleResult<BoardDTO> save(BoardDTO board) {
         MultipartFile[] files = Optional.ofNullable(board.getFiles()).orElse(new MultipartFile[]{});
         if(files.length > 0) {
@@ -124,15 +129,11 @@ public class BoardServiceImpl implements BoardService {
         return responseService.getSingleResult(insertedBoard);
     }
 
-    @Transactional
-    public CommonResult delete(long id) {
-        try {
-            Collection<Image> images = imageJpaRepo.findByBoardId(id);
-            s3Service.deleteFile(images);
-            boardJpaRepo.deleteById(id);
-            return responseService.getSuccessResult();
-        } catch (Exception e) {
-            return responseService.getFailResult(500, e.toString());
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult delete(long id) throws Exception {
+        Collection<Image> images = imageJpaRepo.findByBoardId(id);
+        s3Service.deleteFile(images);
+        boardJpaRepo.deleteById(id);
+        return responseService.getSuccessResult();
     }
 }
