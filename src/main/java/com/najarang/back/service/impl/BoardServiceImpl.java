@@ -99,11 +99,10 @@ public class BoardServiceImpl implements BoardService {
 
         Collection<String> imageUrls = Optional.ofNullable(board.getImageUrls()).orElseGet(() -> new ArrayList<>(){});
         Board insertedBoard = boardJpaRepo.save(board.toEntity());
-        Long boardId = insertedBoard.getId();
         imageUrls.stream().forEach(imageUrl -> {
             ImageDTO image = new ImageDTO();
             image.setFileName(imageUrl);
-            image.setBoard(board);
+            image.setBoard(insertedBoard.toDTO());
             imageJpaRepo.save(image.toEntity());
         });
 
@@ -112,6 +111,7 @@ public class BoardServiceImpl implements BoardService {
         return responseService.getSingleResult(insertedBoardDTO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public SingleResult<BoardDTO> modify(BoardDTO board) {
         long boardId = board.getId();
         Optional<Board> newBoard = boardJpaRepo.findById(boardId);

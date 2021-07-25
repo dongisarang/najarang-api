@@ -21,12 +21,12 @@ public class Comment extends BaseTime {
     @Column()
     private String content;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne()
-    @Column(name = "board_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     public CommentDTO toDTO(){

@@ -23,9 +23,6 @@ public class Topic {
     @Column()
     private String name;
 
-    @OneToMany(mappedBy = "topic")
-    private Collection<UserTopic> users = new ArrayList<>();
-
     public TopicDTO toDTO(){
         return new TopicDTO(this);
     }
