@@ -15,7 +15,7 @@ import com.najarang.back.repo.ImageJpaRepo;
 import com.najarang.back.repo.TopicJpaRepo;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.BoardService;
-import com.najarang.back.util.S3Service;
+import com.najarang.back.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,7 @@ public class BoardServiceImpl implements BoardService {
     private final TopicJpaRepo topicJpaRepo;
     private final ImageJpaRepo imageJpaRepo;
     private final ResponseService responseService;
-    private final S3Service s3Service;
+    private final S3Util s3Util;
 
     public ListResult<BoardDTO> getBoards(Pageable pageable) {
         Page<Board> pageBoards = boardJpaRepo.findAll(pageable);
@@ -82,7 +82,7 @@ public class BoardServiceImpl implements BoardService {
             Arrays.asList(files).stream().forEach(file -> {
                 // s3에 업로드하고 imageurl 가져오기
                 try {
-                    images.add(s3Service.upload(file));
+                    images.add(s3Util.upload(file));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -132,7 +132,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional(rollbackFor = Exception.class)
     public CommonResult delete(long id) throws Exception {
         Collection<Image> images = imageJpaRepo.findByBoardId(id);
-        s3Service.deleteFile(images);
+        s3Util.deleteFile(images);
         boardJpaRepo.deleteById(id);
         return responseService.getSuccessResult();
     }

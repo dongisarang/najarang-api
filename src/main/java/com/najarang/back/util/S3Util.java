@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Service
 @NoArgsConstructor
-public class S3Service {
+public class S3Util {
 
     private static final String CLOUD_FRONT_DOMAIN_NAME = "d9w5z7s0fwglv.cloudfront.net";
 
