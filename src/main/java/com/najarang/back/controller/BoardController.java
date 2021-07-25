@@ -70,7 +70,7 @@ public class BoardController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public CommonResult delete(@PathVariable long id) {
+    public CommonResult delete(@PathVariable long id) throws Exception {
         return boardService.delete(id);
     }
 }
