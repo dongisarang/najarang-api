@@ -1,7 +1,12 @@
 package com.najarang.back.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.najarang.back.entity.User;
+import com.najarang.back.entity.UserTopic;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -10,9 +15,17 @@ public class UserDTO extends BaseTimeDTO {
     private String nickname;
     private String email;
     private String provider;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String role;
+    //@JsonInclude(JsonInclude.Include.NON_NULL)
+    //private Collection<UserTopicDTO> topics;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Collection<Long> topicList;
 
     public UserDTO(User user){
+        //if(user.getTopics() != null) {
+        //    this.topics = user.getTopics().stream().map(topic -> topic.toDTO()).collect(Collectors.toList());
+        //}
         this.id = user.getId();
         this.nickname = user.getNickname();
         this.email = user.getEmail();
@@ -23,12 +36,17 @@ public class UserDTO extends BaseTimeDTO {
     }
 
     public User toEntity(){
+        Collection<UserTopic> topicEntities = new ArrayList<>();
+        //if(topics != null) {
+        //    topicEntities = topics.stream().map(topic -> topic.toEntity()).collect(Collectors.toList());
+        //}
         User user = User.builder()
                 .id(id)
                 .nickname(nickname)
                 .email(email)
                 .provider(provider)
                 .role(role)
+                //.topics(topicEntities)
                 .build();
         user.setCreated(getCreated());
         user.setModified(getModified());

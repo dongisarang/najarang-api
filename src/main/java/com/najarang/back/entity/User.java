@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 /*
@@ -17,7 +19,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Getter
-@ToString
 @Builder
 @DynamicUpdate
 @Table(name = "user") // 'user' 테이블과 매핑
@@ -39,7 +40,23 @@ public class User extends BaseTime {
     @Column()
     private String role;
 
+    // 다대다를 위한 topics 사용
+    @OneToMany(mappedBy = "user")
+    private Collection<UserTopic> topics = new ArrayList<>();
+
     public UserDTO toDTO(){
         return new UserDTO(this);
+    }
+
+    // oneToMany 때문에 lomboc의 toString은 무한루프 발생해서 재정의
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                ", provider='" + provider + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

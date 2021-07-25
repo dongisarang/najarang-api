@@ -5,13 +5,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Getter
-@ToString
 @Builder
 @Table(name = "topic")
 public class Topic {
@@ -23,7 +23,18 @@ public class Topic {
     @Column()
     private String name;
 
+    @OneToMany(mappedBy = "topic")
+    private Collection<UserTopic> users = new ArrayList<>();
+
     public TopicDTO toDTO(){
         return new TopicDTO(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
