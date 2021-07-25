@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService{
         User newUser = userJpaRepo.findById(userId).orElseThrow(CUserNotFoundException::new);
         UserDTO userDto = newUser.toDTO();
         if (user.getNickname() != null) userDto.setNickname(user.getNickname());
-        if (user.getInterestedTopic() != null) userDto.setInterestedTopic(user.getInterestedTopic());
         return responseService.getSingleResult(userJpaRepo.save(userDto.toEntity()));
     }
 

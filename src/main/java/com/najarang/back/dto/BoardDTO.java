@@ -29,7 +29,6 @@ public class BoardDTO extends BaseTimeDTO {
     private String content;
     private UserDTO user;
     private TopicDTO topic;
-    private Long likeCount;
     private Long hitCount;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long topicId;
@@ -45,24 +44,19 @@ public class BoardDTO extends BaseTimeDTO {
         this.content = board.getContent();
         this.user = board.getUser().toDTO();
         this.topic = board.getTopic().toDTO();
-        this.likeCount = board.getLikeCount();
         this.hitCount = board.getHitCount();
-        this.images = board.getImage().stream().map(image -> image.toDTO()).collect(Collectors.toList());
         setCreated(board.getCreated());
         setModified(board.getModified());
     }
 
     public Board toEntity(){
-        Collection<Image> imgs = images.stream().map(image -> image.toEntity()).collect(Collectors.toList());
         Board board = Board.builder()
                 .id(id)
                 .title(title)
                 .content(content)
                 .user(user.toEntity())
                 .topic(topic.toEntity())
-                .likeCount(likeCount)
                 .hitCount(hitCount)
-                .image(imgs)
                 .build();
         board.setCreated(getCreated());
         board.setModified(getModified());

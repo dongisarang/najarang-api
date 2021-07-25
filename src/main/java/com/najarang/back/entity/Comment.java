@@ -17,13 +17,17 @@ public class Comment extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column()
     private String content;
+
     @ManyToOne()
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "user_id")
     private User user;
-    @Column(name = "BOARD_ID")
-    private Long boardId;
+
+    @ManyToOne()
+    @Column(name = "board_id")
+    private Board board;
 
     public CommentDTO toDTO(){
         return new CommentDTO(this);

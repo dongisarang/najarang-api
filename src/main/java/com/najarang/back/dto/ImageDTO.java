@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 public class ImageDTO extends BaseTimeDTO {
     private Long id;
     private String fileName;
-    private Long boardId;
+    private BoardDTO board;
 
     public ImageDTO(Image image){
         this.id = image.getId();
         this.fileName = image.getFileName();
-        this.boardId = image.getBoardId();
+        this.board = image.getBoard().toDTO();
         setCreated(image.getCreated());
         setModified(image.getModified());
     }
@@ -25,7 +25,7 @@ public class ImageDTO extends BaseTimeDTO {
         Image image = Image.builder()
                 .id(id)
                 .fileName(fileName)
-                .boardId(boardId)
+                .board(board.toEntity())
                 .build();
         image.setCreated(getCreated());
         image.setModified(getModified());

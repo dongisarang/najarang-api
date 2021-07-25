@@ -53,8 +53,8 @@ public class BoardServiceImpl implements BoardService {
     private ListResult<BoardDTO> getBoardDTOListResult(Pageable pageable, Page<Board> pageBoards) {
         List<BoardDTO> boardDTOs = pageBoards.getContent().stream().map((board) -> {
             BoardDTO boardDTO = board.toDTO();
-            boardDTO.setImages(null);
-            boardDTO.setImageUrls(board.getImage().stream().map(image -> image.getFileName()).collect(Collectors.toList()));
+            Collection<Image> images = imageJpaRepo.findByBoardId(boardDTO.getId());
+            boardDTO.setImageUrls(images.stream().map(image -> image.getFileName()).collect(Collectors.toList()));
             return boardDTO;
         }).collect(Collectors.toList());
         Page<BoardDTO> pageBoardDTOs = new PageImpl<>(boardDTOs, pageable, pageBoards.getTotalElements());
@@ -63,8 +63,9 @@ public class BoardServiceImpl implements BoardService {
 
     public SingleResult<BoardDTO> getBoard(long id) {
         Board board = boardJpaRepo.findById(id).orElseThrow(CBoardNotFoundException::new);
+        Collection<Image> images = imageJpaRepo.findByBoardId(id);
         BoardDTO boardDTO = board.toDTO();
-        boardDTO.setImageUrls(board.getImage().stream().map(image -> image.getFileName()).collect(Collectors.toList()));
+        boardDTO.setImageUrls(images.stream().map(image -> image.getFileName()).collect(Collectors.toList()));
         boardDTO.setImages(null);
         return responseService.getSingleResult(boardDTO);
     }
@@ -102,7 +103,7 @@ public class BoardServiceImpl implements BoardService {
         imageUrls.stream().forEach(imageUrl -> {
             ImageDTO image = new ImageDTO();
             image.setFileName(imageUrl);
-            image.setBoardId(boardId);
+            image.setBoard(board);
             imageJpaRepo.save(image.toEntity());
         });
 

@@ -22,7 +22,7 @@ public class CommentDTO extends BaseTimeDTO{
         this.id = comment.getId();
         this.content = comment.getContent();
         this.user = comment.getUser().toDTO();
-        this.boardId = comment.getBoardId();
+        this.board = comment.getBoard().toDTO();
         setCreated(comment.getCreated());
         setModified(comment.getModified());
     }
@@ -32,7 +32,7 @@ public class CommentDTO extends BaseTimeDTO{
                 .id(id)
                 .content(content)
                 .user(user.toEntity())
-                .boardId(boardId)
+                .board(board.toEntity())
                 .build();
         comment.setCreated(comment.getCreated());
         comment.setModified(comment.getModified());

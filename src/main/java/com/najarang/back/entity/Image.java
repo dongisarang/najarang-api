@@ -15,16 +15,19 @@ import javax.persistence.*;
 @Getter
 @ToString
 @Builder
-@Table(name = "board_image")
+@Table(name = "image")
 public class Image extends BaseTime {
 
-    @Id // primaryKey임
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // pk 필드를 auto_increment로 설정
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "BOARD_ID")
-    private Long boardId;
-    @Column(name = "FILE_NAME")
+    // board:image = 1:N을 표현하기 위해 읽기전용으로 만듬
+    @ManyToOne
+    @JoinColumn(name = "board_id", insertable = false, updatable = false)
+    private Board board;
+
+    @Column(name = "file_name")
     private String fileName;
 
     public ImageDTO toDTO(){
