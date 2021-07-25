@@ -24,21 +24,21 @@ public class SignController {
     private final ResponseService responseService; // 결과를 처리할 Service
 
     @PostMapping(path = "/sign-in")
-    public CommonResult signIn(@RequestBody UserDTO user, HttpServletRequest req, HttpServletResponse res) {
+    public CommonResult signIn(@RequestBody UserDTO user, HttpServletResponse res) {
         Cookie accessToken = userService.signIn(user);
         res.addCookie(accessToken);
         return responseService.getSuccessResult();
     }
 
     @PostMapping(path = "/sign-up")
-    public CommonResult signUp(@RequestBody UserDTO user, HttpServletRequest req, HttpServletResponse res) {
+    public CommonResult signUp(@RequestBody UserDTO user, HttpServletResponse res) {
         Cookie accessToken = userService.signUp(user);
         res.addCookie(accessToken);
         return responseService.getSuccessResult();
     }
 
     @PostMapping(path = "/sign-out")
-    public CommonResult signOut(@AuthenticationPrincipal CustomUserDetails customUserDetail, HttpServletRequest req, HttpServletResponse res) {
+    public CommonResult signOut(@AuthenticationPrincipal CustomUserDetails customUserDetail, HttpServletResponse res) {
         userService.signOut(customUserDetail.getUser().toDTO());
         Cookie resetCookie = new Cookie(JwtTokenProvider.ACCESS_TOKEN_NAME, "");
         resetCookie.setMaxAge(0);

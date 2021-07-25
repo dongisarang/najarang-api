@@ -14,27 +14,28 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
+@RequestMapping("/topics")
 public class TopicController {
 
     private final TopicService topicService;
 
-    @GetMapping(value = "/topics")
+    @GetMapping()
     public ListResult<Topic> findAllTopic(final Pageable pageable) {
         return topicService.list(pageable);
     }
 
-    @PostMapping(value = "/topics")
+    @PostMapping()
     public SingleResult<Topic> save(@RequestBody TopicDTO topic) {
         return topicService.save(topic);
     }
 
-    @PutMapping(value = "/topics/{id}")
+    @PutMapping(value = "/{id}")
     public SingleResult<Topic> modify(@RequestBody TopicDTO topic, @PathVariable long id) {
         topic.setId(id);
         return topicService.modify(topic);
     }
 
-    @DeleteMapping(value = "/topics/{id}")
+    @DeleteMapping(value = "/{id}")
     public CommonResult delete(@PathVariable long id) {
         return topicService.delete(id);
     }

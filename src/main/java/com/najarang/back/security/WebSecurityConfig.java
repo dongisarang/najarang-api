@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    //PasswordEncoder는 다른 서비스에서도 쓰일 수 있음으로 빈객체로 등록
+    // PasswordEncoder는 다른 서비스에서도 쓰일 수 있음으로 빈객체로 등록
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
