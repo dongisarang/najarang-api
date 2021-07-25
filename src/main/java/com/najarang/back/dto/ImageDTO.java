@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ImageDTO extends BaseTimeDTO {
     private Long id;
     private String fileName;
     private Long boardId;
 
-    @Builder
     public ImageDTO(Image image){
         this.id = image.getId();
         this.fileName = image.getFileName();

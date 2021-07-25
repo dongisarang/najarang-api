@@ -24,6 +24,6 @@ public class Topic{
     private String name;
 
     public TopicDTO toDTO(){
-        return new TopicDTO(this.id, this.name);
+        return new TopicDTO(this);
     }
 }

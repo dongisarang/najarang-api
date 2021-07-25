@@ -94,7 +94,7 @@ public class BoardServiceImpl implements BoardService {
         }
         Long topicId = board.getTopicId();
         Topic topic = topicJpaRepo.findById(topicId).orElseThrow(CTopicNotFoundException::new);
-        board.setTopic(topic);
+        board.setTopic(topic.toDTO());
 
         Collection<String> imageUrls = Optional.ofNullable(board.getImageUrls()).orElseGet(() -> new ArrayList<>(){});
         Board insertedBoard = boardJpaRepo.save(board.toEntity());
@@ -119,7 +119,7 @@ public class BoardServiceImpl implements BoardService {
         if (board.getContent() != null) boardDto.setContent(board.getContent());
         if (board.getTopicId() != null) {
             Topic topic = topicJpaRepo.findById(boardDto.getTopicId()).orElseThrow(CTopicNotFoundException::new);
-            boardDto.setTopic(topic);
+            boardDto.setTopic(topic.toDTO());
         }
         BoardDTO insertedBoard = boardJpaRepo.save(boardDto.toEntity()).toDTO();
         if(insertedBoard.getImages().size() > 0) {

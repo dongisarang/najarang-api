@@ -1,12 +1,10 @@
 package com.najarang.back.dto;
 
-import com.najarang.back.entity.BaseTime;
 import com.najarang.back.entity.User;
 import lombok.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserDTO extends BaseTimeDTO {
     private Long id;
     private String interestedTopic;
@@ -16,7 +14,6 @@ public class UserDTO extends BaseTimeDTO {
     private String provider;
     private String role;
 
-    @Builder
     public UserDTO(User user){
         this.id = user.getId();
         this.interestedTopic = user.getInterestedTopic();

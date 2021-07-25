@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class TopicDTO{
     private Long id;
     private String name;
 
-    @Builder
     public TopicDTO(Topic topic){
         this.id = topic.getId();
         this.name = topic.getName();
