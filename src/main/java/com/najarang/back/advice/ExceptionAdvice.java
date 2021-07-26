@@ -53,13 +53,13 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(CBoardNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected CommonResult boardNotFoundException(HttpServletRequest request, CUserNotFoundException e) {
+    protected CommonResult boardNotFoundException(HttpServletRequest request, CBoardNotFoundException e) {
         return responseService.getFailResult(404, "게시글 정보가 없습니다.");
     }
 
     @ExceptionHandler(CTopicNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected CommonResult topicNotFoundException(HttpServletRequest request, CUserNotFoundException e) {
+    protected CommonResult topicNotFoundException(HttpServletRequest request, CTopicNotFoundException e) {
         return responseService.getFailResult(404, "토픽 정보가 없습니다.");
     }
 }

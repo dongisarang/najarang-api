@@ -20,15 +20,20 @@ public class UserTopic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "topic_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "topic_id")
     private Topic topic;
 
     public UserTopicDTO toDTO(){
         return new UserTopicDTO(this);
+    }
+
+    public void setBasicInfo(User user, Topic topic) {
+        this.user = user;
+        this.topic = topic;
     }
 }

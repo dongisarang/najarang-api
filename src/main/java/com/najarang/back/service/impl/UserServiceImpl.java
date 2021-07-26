@@ -1,13 +1,18 @@
 package com.najarang.back.service.impl;
 
+import com.najarang.back.advice.exception.CTopicNotFoundException;
 import com.najarang.back.advice.exception.CUserAlreadyExistException;
 import com.najarang.back.advice.exception.CUserNotFoundException;
 import com.najarang.back.dto.UserDTO;
+import com.najarang.back.entity.Topic;
 import com.najarang.back.entity.User;
+import com.najarang.back.entity.UserTopic;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.model.response.ListResult;
 import com.najarang.back.model.response.SingleResult;
+import com.najarang.back.repo.TopicJpaRepo;
 import com.najarang.back.repo.UserJpaRepo;
+import com.najarang.back.repo.UserTopicJpaRepo;
 import com.najarang.back.security.JwtTokenProvider;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.UserService;
@@ -18,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import java.util.Optional;
@@ -28,6 +34,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
 
     private final UserJpaRepo userJpaRepo;
+    private final TopicJpaRepo topicJpaRepo;
+    private final UserTopicJpaRepo userTopicJpaRepo;
     private final ResponseService responseService;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
@@ -68,10 +76,18 @@ public class UserServiceImpl implements UserService{
         return accessToken;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Cookie signUp(UserDTO user) {
         Optional<User> loginUser = userJpaRepo.findByEmailAndProvider(user.getEmail(), user.getProvider());
         loginUser.ifPresent(s -> { throw new CUserAlreadyExistException(); });
+        if(user.getTopicList() == null || user.getTopicList().isEmpty()) throw new RuntimeException("topicList: number[]가 필요합니다.");
         User insertedUser = userJpaRepo.save(user.toEntity());
+        user.getTopicList().stream().forEach(topicId -> {
+            Topic topic = topicJpaRepo.findById(topicId).orElseThrow(CTopicNotFoundException::new);
+            UserTopic userTopic = new UserTopic();
+            userTopic.setBasicInfo(insertedUser, topic);
+            userTopicJpaRepo.save(userTopic);
+        });
         Cookie accessToken = this.loginSuccess(insertedUser);
         return accessToken;
     }
