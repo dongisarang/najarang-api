@@ -15,16 +15,18 @@ import javax.persistence.*;
 @Getter
 @ToString
 @Builder
-@Table(name = "board_image")
+@Table(name = "image")
 public class Image extends BaseTime {
 
-    @Id // primaryKey임
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // pk 필드를 auto_increment로 설정
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "BOARD_ID")
-    private Long boardId;
-    @Column(name = "FILE_NAME")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+
+    @Column(name = "file_name")
     private String fileName;
 
     public ImageDTO toDTO(){

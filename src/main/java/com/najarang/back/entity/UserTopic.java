@@ -1,39 +1,39 @@
 package com.najarang.back.entity;
 
-import com.najarang.back.dto.CommentDTO;
+import com.najarang.back.dto.UserTopicDTO;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Getter
-@ToString
 @Builder
 @DynamicUpdate
-@DynamicInsert
-@Table(name = "comment")
-public class Comment extends BaseTime {
+@Table(name = "user_topic")
+public class UserTopic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column()
-    private String content;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
-    public CommentDTO toDTO(){
-        return new CommentDTO(this);
+    public UserTopicDTO toDTO(){
+        return new UserTopicDTO(this);
+    }
+
+    public void setBasicInfo(User user, Topic topic) {
+        this.user = user;
+        this.topic = topic;
     }
 }

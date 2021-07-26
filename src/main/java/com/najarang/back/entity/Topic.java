@@ -5,25 +5,33 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Getter
-@ToString
 @Builder
 @Table(name = "topic")
-public class Topic{
+public class Topic {
 
-    @Id // primaryKey임
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //  pk 필드를 auto_increment로 설정
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column()
     private String name;
 
     public TopicDTO toDTO(){
-        return new TopicDTO(this.id, this.name);
+        return new TopicDTO(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Topic{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

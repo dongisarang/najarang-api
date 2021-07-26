@@ -13,6 +13,7 @@ spring:
     web:
       pageable:
         default-page-size: 10
-        one-indexed-parameters: true
+        one-indexed-parameters: true # page 1부터 시작
 
+# bootstrap.yml이 application.yml보다 먼저 로드
 

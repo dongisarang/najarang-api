@@ -1,4 +1,4 @@
-package com.najarang.back.controller.v1;
+package com.najarang.back.controller;
 
 import com.najarang.back.dto.CommentDTO;
 import com.najarang.back.model.response.CommonResult;
@@ -12,15 +12,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
-@RestController
 @Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;
     private final ResponseService responseService;
 
-    @GetMapping(value = "/comments")
+    @GetMapping()
     public ListResult<CommentDTO> findAllComment(final Pageable pageable, @RequestParam(required = false) Long boardId) {
         ListResult<CommentDTO> result;
         if (boardId == null)
@@ -30,30 +31,22 @@ public class CommentController {
         return result;
     }
 
-    @PostMapping(value = "/comments")
+    // @RequestBody : Json(application/json) 형태의 HTTP Body 내용을 Java Object로 변환시켜주는 어노테이션
+    // - 요청받은 데이터를 변환시키는 것이기 때문에, Setter함수가 없어도 값이 매핑
+    @PostMapping()
     public CommonResult save(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment) {
-        try {
-            comment.setUser(customUserDetail.getUser());
-            return commentService.save(comment);
-        } catch (Exception e) {
-            return responseService.getFailResult(500, e.toString());
-        }
+        comment.setUser(customUserDetail.getUser());
+        return commentService.save(comment);
     }
 
-    @PutMapping(value = "/comments/{id}")
+    @PutMapping(value = "/{id}")
     public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment, @PathVariable long id) {
-        try {
-            comment.setId(id);
-            comment.setUser(customUserDetail.getUser());
-
-            return commentService.modify(comment);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return responseService.getFailResult(500, e.toString());
-        }
+        comment.setId(id);
+        comment.setUser(customUserDetail.getUser());
+        return commentService.modify(comment);
     }
 
-    @DeleteMapping(value = "/comments/{id}")
+    @DeleteMapping(value = "/{id}")
     public CommonResult delete(@PathVariable long id) {
         return commentService.delete(id);
     }
