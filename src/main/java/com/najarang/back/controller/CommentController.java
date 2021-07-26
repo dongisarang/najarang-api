@@ -39,14 +39,14 @@ public class CommentController {
         return commentService.save(comment);
     }
 
-    @PutMapping()
+    @PutMapping(value = "/{id}")
     public CommonResult modify(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment, @PathVariable long id) {
         comment.setId(id);
         comment.setUser(customUserDetail.getUser());
         return commentService.modify(comment);
     }
 
-    @DeleteMapping(value = "/comments/{id}")
+    @DeleteMapping(value = "/{id}")
     public CommonResult delete(@PathVariable long id) {
         return commentService.delete(id);
     }

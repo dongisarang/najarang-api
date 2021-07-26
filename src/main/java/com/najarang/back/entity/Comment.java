@@ -2,6 +2,8 @@ package com.najarang.back.entity;
 
 import com.najarang.back.dto.CommentDTO;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -11,6 +13,8 @@ import javax.persistence.*;
 @Getter
 @ToString
 @Builder
+@DynamicUpdate
+@DynamicInsert
 @Table(name = "comment")
 public class Comment extends BaseTime {
 

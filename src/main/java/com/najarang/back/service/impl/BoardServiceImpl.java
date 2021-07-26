@@ -93,20 +93,21 @@ public class BoardServiceImpl implements BoardService {
                 board.setImageUrls(images);
             }
         }
+
         Long topicId = board.getTopicId();
         Topic topic = topicJpaRepo.findById(topicId).orElseThrow(CTopicNotFoundException::new);
         board.setTopic(topic.toDTO());
 
         Collection<String> imageUrls = Optional.ofNullable(board.getImageUrls()).orElseGet(() -> new ArrayList<>(){});
         Board insertedBoard = boardJpaRepo.save(board.toEntity());
+        BoardDTO insertedBoardDTO = insertedBoard.toDTO();
         imageUrls.stream().forEach(imageUrl -> {
             ImageDTO image = new ImageDTO();
             image.setFileName(imageUrl);
-            image.setBoard(insertedBoard.toDTO());
+            image.setBoard(insertedBoardDTO);
             imageJpaRepo.save(image.toEntity());
         });
 
-        BoardDTO insertedBoardDTO = insertedBoard.toDTO();
         if(imageUrls.size() > 0) insertedBoardDTO.setImageUrls(imageUrls);
         return responseService.getSingleResult(insertedBoardDTO);
     }
@@ -119,14 +120,14 @@ public class BoardServiceImpl implements BoardService {
         if (board.getTitle() != null) boardDto.setTitle(board.getTitle());
         if (board.getContent() != null) boardDto.setContent(board.getContent());
         if (board.getTopicId() != null) {
-            Topic topic = topicJpaRepo.findById(boardDto.getTopicId()).orElseThrow(CTopicNotFoundException::new);
+            Topic topic = topicJpaRepo.findById(board.getTopicId()).orElseThrow(CTopicNotFoundException::new);
             boardDto.setTopic(topic.toDTO());
         }
         BoardDTO insertedBoard = boardJpaRepo.save(boardDto.toEntity()).toDTO();
-        if(insertedBoard.getImages().size() > 0) {
-            insertedBoard.setImageUrls(insertedBoard.getImages().stream().map(image -> image.getFileName()).collect(Collectors.toList()));
+        Collection<Image> images = imageJpaRepo.findByBoardId(insertedBoard.getId());
+        if(images.size() > 0) {
+            insertedBoard.setImageUrls(images.stream().map(image -> image.getFileName()).collect(Collectors.toList()));
         }
-        insertedBoard.setImages(null);
         return responseService.getSingleResult(insertedBoard);
     }
 
@@ -134,6 +135,7 @@ public class BoardServiceImpl implements BoardService {
     public CommonResult delete(long id) throws Exception {
         Collection<Image> images = imageJpaRepo.findByBoardId(id);
         s3Util.deleteFile(images);
+        imageJpaRepo.deleteByBoardId(id);
         boardJpaRepo.deleteById(id);
         return responseService.getSuccessResult();
     }

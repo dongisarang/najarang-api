@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ImageJpaRepo extends JpaRepository<Image, Long> {
     Optional<Image> findById(Long id);
     Collection<Image> findByBoardId(Long boardId);
+    void deleteByBoardId(Long boardId);
 }

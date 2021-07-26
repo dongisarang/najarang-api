@@ -22,9 +22,8 @@ public class Image extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // board:image = 1:N을 표현하기 위해 읽기전용으로 만듬
-    @ManyToOne
-    @JoinColumn(name = "board_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @Column(name = "file_name")

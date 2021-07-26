@@ -1,10 +1,13 @@
 package com.najarang.back.service.impl;
 
+import com.najarang.back.advice.exception.CBoardNotFoundException;
 import com.najarang.back.dto.CommentDTO;
+import com.najarang.back.entity.Board;
 import com.najarang.back.entity.Comment;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.model.response.ListResult;
 import com.najarang.back.model.response.SingleResult;
+import com.najarang.back.repo.BoardJpaRepo;
 import com.najarang.back.repo.CommentJpaRepo;
 import com.najarang.back.service.ResponseService;
 import com.najarang.back.service.CommentService;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentJpaRepo commentJpaRepo;
+    private final BoardJpaRepo boardJpaRepo;
     private final ResponseService responseService;
 
     public ListResult<CommentDTO> list(Pageable pageable) {
@@ -47,6 +51,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public SingleResult<CommentDTO> save(CommentDTO comment) {
+        Long boardId = comment.getBoardId();
+        Board board = boardJpaRepo.findById(boardId).orElseThrow(CBoardNotFoundException::new);
+        comment.setBoard(board.toDTO());
         CommentDTO insertedComment = commentJpaRepo.save(comment.toEntity()).toDTO();
         insertedComment.setUser(null);
         return responseService.getSingleResult(insertedComment);
