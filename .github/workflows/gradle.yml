@@ -43,7 +43,7 @@ jobs:
               echo "#### change directory to $SOURCE_DIR ####"
               cd $SOURCE_DIR
               
-              PID=`lsof -i TCP:8080 | awk 'NR == 2 {print $2}'`
+              PID=$(pgrep -f najarang-api)
               echo "#### PID : [ $PID ] ####"
               
               if [ -z "$PID" ]; then
