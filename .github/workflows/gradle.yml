@@ -57,6 +57,6 @@ jobs:
               fi
               
               echo "#### RUN $SOURCE_DIR/$FILE_NAME ####"
-              nohup java -XX:MaxMetaspaceSize=512m -XX:MetaspaceSize=256m -jar $SOURCE_DIR/$FILE_NAME > /dev/null 2>&1 &
+              nohup java -XX:MaxMetaspaceSize=512m -XX:MetaspaceSize=256m -jar $SOURCE_DIR/$FILE_NAME 2>&1 &
               
               echo "#### [SUCCESS] DEPLOY SPRING ####"
