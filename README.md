@@ -36,4 +36,4 @@
 - aws lamda -> thumbnail
 - use slack for deploy/error 
 - 좋아요 기능 지원
-- id/pwd 로그인 지원
+- id/pwd 로그인 지원 
