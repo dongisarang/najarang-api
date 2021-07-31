@@ -29,6 +29,8 @@
 - DTO 분리 (작업중)
 - validation
 - unit test
+- access_token받아서 사용자 확인 후 토큰 생성
 - aws lamda -> thumbnail
 - use slack for deploy/error 
 - 좋아요 기능 지원
+- id/pwd 로그인 지원
