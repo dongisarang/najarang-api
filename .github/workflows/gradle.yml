@@ -43,7 +43,7 @@ jobs:
               echo "#### change directory to $SOURCE_DIR ####"
               cd $SOURCE_DIR
               
-              PID=$(pgrep -f najarang-api)
+              PID=$(pgrep -f springboot-start.jar)
               echo "#### PID : [ $PID ] ####"
               
               if [ -z "$PID" ]; then
