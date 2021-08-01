@@ -16,6 +16,13 @@
 ![](https://github.com/dongisarang/najarang-docs/blob/master/ARCHITECTURE/architecture1.PNG)
 <br>
 
+---
+<br>
+
+## CI/CD
+![](https://github.com/dongisarang/najarang-docs/blob/master/ARCHITECTURE/architecture3.PNG)
+<br>
+
 ***
 <br>
 
