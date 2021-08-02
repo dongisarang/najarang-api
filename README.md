@@ -36,9 +36,9 @@
 <br><br><br>
 
 #### TODO - version1
-- DTO 분리 (작업중)
 - validation
 - unit test
+- DTO 분리 
 - access_token받아서 사용자 확인 후 토큰 생성
 - aws lamda -> thumbnail
 - use slack for deploy/error 
