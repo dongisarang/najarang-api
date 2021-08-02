@@ -89,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity
                 // cors 설정
-                .cors().and()
+                .cors().configurationSource(corsConfigurationSource()).and()
                 // basic auth를 사용하기 위해 csrf 보호 기능 disable
                 .csrf().disable()
                 // PERMIT_ALL_PATHS에 해당하는 모든 request를 인증
