@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -51,13 +52,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService jwtUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    private static final String[] PERMIT_ALL_PATHS = {
+    private static final String[] PERMIT_POST_PATHS = {
             "/sign-in",
             "/sign-up",
+    };
+    private static final String[] PERMIT_GET_PATHS = {
             "/topics",
             "/boards",
-            "/board/**",
-            "/exception/**",
+            "/comments",
     };
 
     // @Autowired: 주입 대상이 되는 bean을 컨테이너에 찾아 주입
@@ -94,7 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 // PERMIT_ALL_PATHS에 해당하는 모든 request를 인증
                 .authorizeRequests().
-                    antMatchers(PERMIT_ALL_PATHS).permitAll().
+                    antMatchers(HttpMethod.POST, PERMIT_POST_PATHS).permitAll().
+                    antMatchers(HttpMethod.GET, PERMIT_GET_PATHS).permitAll().
                 // 그외 다른요청은 인증 필요
                     anyRequest().authenticated().and().
                         exceptionHandling()
