@@ -1,5 +1,5 @@
 [![Spring build & deploy](https://github.com/dongisarang/najarang-api/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/dongisarang/najarang-api/actions/workflows/gradle.yml) 
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=plastic&logo=appveyor)](#contributors-)
+<!-- [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=plastic&logo=appveyor)](#contributors-) -->
 # najarang-api
 - 자랑하기 커뮤니티를 지원하는 API
     -  게시물, 댓글, 로그인 기능 지원
