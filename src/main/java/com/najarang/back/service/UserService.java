@@ -1,5 +1,6 @@
 package com.najarang.back.service;
 
+import com.najarang.back.dto.SignInRequestDto;
 import com.najarang.back.dto.UserDTO;
 import com.najarang.back.entity.User;
 import com.najarang.back.model.response.CommonResult;
@@ -16,7 +17,7 @@ public interface UserService {
     SingleResult<User> save(UserDTO user);
     SingleResult<User> modify(UserDTO user);
     CommonResult delete(long id);
-    Cookie signIn(UserDTO user);
+    Cookie signIn(SignInRequestDto user);
     Cookie signUp(UserDTO user);
     void signOut(UserDTO user);
 }

@@ -1,5 +1,6 @@
 package com.najarang.back.controller;
 
+import com.najarang.back.dto.SignInRequestDto;
 import com.najarang.back.dto.UserDTO;
 import com.najarang.back.model.response.CommonResult;
 import com.najarang.back.security.CustomUserDetails;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,7 +25,7 @@ public class SignController {
     private final ResponseService responseService; // 결과를 처리할 Service
 
     @PostMapping(path = "/sign-in")
-    public CommonResult signIn(@RequestBody UserDTO user, HttpServletResponse res) {
+    public CommonResult signIn(@RequestBody @Valid SignInRequestDto user, HttpServletResponse res) {
         Cookie accessToken = userService.signIn(user);
         res.addCookie(accessToken);
         return responseService.getSuccessResult();

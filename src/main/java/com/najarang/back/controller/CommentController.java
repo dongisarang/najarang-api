@@ -31,8 +31,9 @@ public class CommentController {
         return result;
     }
 
-    // @RequestBody : Json(application/json) 형태의 HTTP Body 내용을 Java Object로 변환시켜주는 어노테이션
-    // - 요청받은 데이터를 변환시키는 것이기 때문에, Setter함수가 없어도 값이 매핑
+    // @RequestBody : HTTP Body 내용을 Java Object로 변환시켜주는 어노테이션
+    // - accept-header 정보를 참조하여 Json이나 XML같은 형태의 data를 jackson등의 MessageConverter를 활용하여 Java Object로 변환
+    // - JSON -> Java Object로 변환은 Jackson2HttpMessageConverter에서 해줌. -> Setter함수가 없어도 값이 매핑
     @PostMapping()
     public CommonResult save(@AuthenticationPrincipal CustomUserDetails customUserDetail, @RequestBody CommentDTO comment) {
         comment.setUser(customUserDetail.getUser());

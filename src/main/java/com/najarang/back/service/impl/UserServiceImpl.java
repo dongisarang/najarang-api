@@ -3,6 +3,7 @@ package com.najarang.back.service.impl;
 import com.najarang.back.advice.exception.CTopicNotFoundException;
 import com.najarang.back.advice.exception.CUserAlreadyExistException;
 import com.najarang.back.advice.exception.CUserNotFoundException;
+import com.najarang.back.dto.SignInRequestDto;
 import com.najarang.back.dto.UserDTO;
 import com.najarang.back.entity.Topic;
 import com.najarang.back.entity.User;
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService{
         return responseService.getSuccessResult();
     }
 
-    public Cookie signIn(UserDTO user) {
+    public Cookie signIn(SignInRequestDto user) {
         Optional<User> loginUser = userJpaRepo.findByEmailAndProvider(user.getEmail(), user.getProvider());
         loginUser.orElseThrow(CUserNotFoundException::new);
         Cookie accessToken = this.loginSuccess(loginUser.get());
